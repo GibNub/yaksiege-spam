@@ -10,7 +10,7 @@ def create(username):
         'repeat-password': 'spoon'
     }
     r = requests.post(url, data=form_data)
-    print(r.text)
+    print(r.content)
 
 
 def main():
@@ -27,7 +27,7 @@ def main():
             space_iteration = 1
             username = username_original
             continue
-        if username_iteration > len(username):
+        if username_iteration == len(username):
             print('account raid successful')
             break
         create(username)
