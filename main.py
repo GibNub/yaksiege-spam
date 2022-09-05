@@ -61,7 +61,6 @@ def main():
             th = threading.Thread(target=create_account, args=(url, username, kingdom))
             th.daemon = True
             threads.append(th)
-        for th in threads:
             th.start()
         for th in threads:
             th.join()
