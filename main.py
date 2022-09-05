@@ -7,13 +7,17 @@ from selenium.webdriver.common.by import By
 import credentials
 
 
+# Browser engine
 def get_driver():
     options = webdriver.ChromeOptions()
+    # Insert settings here
     options.headless = True # Comment this line to see browsers
+    options.add_argument('--incognito')
     dr = webdriver.Chrome(options=options)
     return dr
 
 
+# Mass create accounts
 def create_account(url, username, kingdom):
     dr = get_driver()
     dr.get(url)
@@ -37,19 +41,20 @@ def create_account(url, username, kingdom):
         dr.find_element(By.LINK_TEXT, 'Logout').click()
         print(f'Account created with username: {filler_username} and kingdom name: {filler_kingdom}')
 
-
+# Main function
 def main():
     url = 'https://yaksiege-1.johnnyl19432.repl.co/'
-    username = input('Enter Username (recommended 15 char max) >>> ')
-    kingdom = input('Enter kingdom name (recommended 15 char max) >>> ')
+    username = input('Enter Username (recommended 16 char max) >>> ')
+    kingdom = input('Enter kingdom name (recommended 16 char max) >>> ')
     t = input('Threads? (leave blank for no) >>> ')
     # Create threads
+    # Parallel creation
     if t:
         threads = []
         count = int(input("How many? >>> "))
         for i in range(count):
             th = threading.Thread(target=create_account, args=(url, username, kingdom))
-            th.daemon = True
+            th.daemon = True # Quickly quit program
             threads.append(th)
         for th in threads:
             th.start()
