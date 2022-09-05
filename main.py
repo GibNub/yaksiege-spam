@@ -52,7 +52,7 @@ def main():
     if t:
         threads = []
         count = int(input("How many? >>> "))
-        for i in range(20):
+        for i in range(count):
             th = threading.Thread(target=check_driver, args=(url, username, kingdom))
             th.daemon = True
             threads.append(th)
