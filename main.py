@@ -1,20 +1,10 @@
 import threading
-import random
-import string
-import secrets
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-
-def filler(length):
-    x = ''.join(random.choices(string.ascii_letters + string.digits, k=(20-length)))
-    return x
-
-
-def password():
-    p = ''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(30))
-    return p
+# Local modules
+import credentials
 
 
 def get_driver():
@@ -29,9 +19,9 @@ def create_account(url, username, kingdom):
     dr.get(url)
     while True:
         # Credentials
-        password = password()
-        filler_username = f'{username}{filler(len(username))}'
-        filler_kingdom = f'{kingdom}{filler(len(kingdom))}'
+        password = credentials.password()
+        filler_username = f'{username}{credentials.filler(len(username))}'
+        filler_kingdom = f'{kingdom}{credentials.filler(len(kingdom))}'
         # Goto signup
         dr.find_element(By.ID, 'SignupButton').click()
         # Fill form
@@ -45,7 +35,7 @@ def create_account(url, username, kingdom):
         dr.find_element(By.CLASS_NAME, 'submit-button').click()
         # Logout
         dr.find_element(By.LINK_TEXT, 'Logout').click()
-        print('Account Created')
+        print(f'Account created with username: {filler_username} and kingdom name: {filler_kingdom}')
 
 
 def main():
