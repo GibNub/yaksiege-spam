@@ -10,6 +10,7 @@ import credentials
 def get_driver():
     options = webdriver.ChromeOptions()
     options.headless = True
+    options.add_argument("--incognito")
     dr = webdriver.Chrome(options=options)
     return dr
 
@@ -45,10 +46,10 @@ def check_driver(url, username, kingdom, dr=None):
 
 
 def main():
-    username = 'JohnnyLbozo'
-    kingdom = 'OkIPullUp'
     url = 'https://yaksiege-1.johnnyl19432.repl.co/'
-    t = input("Threads? (leave blank for no) >>> ")
+    username = input('Enter Username (recommended 15 char max) >>> ')
+    kingdom = input('Enter kingdom name (recommended 15 char max) >>> ')
+    t = input('Threads? (leave blank for no) >>> ')
     if t:
         threads = []
         count = int(input("How many? >>> "))
