@@ -9,8 +9,7 @@ import credentials
 
 def get_driver():
     options = webdriver.ChromeOptions()
-    options.headless = True
-    options.add_argument("--incognito")
+    options.headless = True # Comment this line to see browsers
     dr = webdriver.Chrome(options=options)
     return dr
 
