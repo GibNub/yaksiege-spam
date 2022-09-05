@@ -1,36 +1,59 @@
-import requests
+import threading
 
-url = 'https://yaksiege-1.johnnyl19432.repl.co/signup'
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+# Own modules
+import credentials
 
 
-def create(username):
-    form_data = {
-        'username': username,
-        'password': 'spoon',
-        'repeat-password': 'spoon'
-    }
-    r = requests.post(url, data=form_data)
-    print(r.content)
+def get_driver():
+    options = webdriver.ChromeOptions()
+    options.headless = True # Comment this line to see browsers
+    dr = webdriver.Chrome(options=options)
+    return dr
+
+
+def create_account(url, username, kingdom):
+    dr = get_driver()
+    dr.get(url)
+    while True:
+        # Credentials
+        password = credentials.password()
+        # Goto signup
+        dr.find_element(By.ID, 'SignupButton').click()
+        # Fill form
+        dr.find_element(By.NAME, 'username').send_keys(f'{username}{credentials.filler(len(username))}')
+        dr.find_element(By.NAME, 'password').send_keys(password)
+        dr.find_element(By.NAME, 'repeat-password').send_keys(password)
+        dr.find_element(By.CLASS_NAME, 'submit-button').click()
+        # Create kingdom
+        dr.find_element(By.LINK_TEXT, 'Siege!').click()
+        dr.find_element(By.NAME, 'kingdom_name').send_keys(f'{kingdom}{credentials.filler(len(kingdom))}')
+        dr.find_element(By.CLASS_NAME, 'submit-button').click()
+        # Logout
+        dr.find_element(By.LINK_TEXT, 'Logout').click()
+        print('Account Created')
 
 
 def main():
-    zero_width = '​'
-    username_original = input('Enter username >>> ')
-    maxlength = 20
-    username_iteration = 0
-    space_iteration = 1
-    while True:
-        username = f'{username_original[:username_iteration]}{zero_width * space_iteration}{username_original[username_iteration:]}'
-        space_iteration += 1
-        if len(username) > maxlength:
-            username_iteration += 1
-            space_iteration = 1
-            username = username_original
-            continue
-        if username_iteration == len(username):
-            print('account raid successful')
-            break
-        create(username)
+    url = 'https://yaksiege-1.johnnyl19432.repl.co/'
+    username = input('Enter Username (recommended 15 char max) >>> ')
+    kingdom = input('Enter kingdom name (recommended 15 char max) >>> ')
+    t = input('Threads? (leave blank for no) >>> ')
+    if t:
+        threads = []
+        count = int(input("How many? >>> "))
+        for i in range(count):
+            th = threading.Thread(target=create_account, args=(url, username, kingdom))
+            th.daemon = True
+            threads.append(th)
+        for th in threads:
+            th.start()
+        for th in threads:
+            th.join()
+    else:
+        create_account(url, username, kingdom)
 
 
 if __name__ == '__main__':
