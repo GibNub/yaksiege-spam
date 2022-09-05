@@ -14,7 +14,8 @@ def get_driver():
     return dr
 
 
-def create_account(url, dr, username, kingdom):
+def create_account(url, username, kingdom):
+    dr = get_driver()
     dr.get(url)
     while True:
         # Credentials
@@ -35,15 +36,6 @@ def create_account(url, dr, username, kingdom):
         print('Account Created')
 
 
-def check_driver(url, username, kingdom, dr=None):
-    if dr:
-        create_account(url, dr, username, kingdom)
-    else:
-        dr = get_driver()
-        create_account(url, dr, username, kingdom)
-        dr.quit()
-
-
 def main():
     url = 'https://yaksiege-1.johnnyl19432.repl.co/'
     username = input('Enter Username (recommended 15 char max) >>> ')
@@ -53,7 +45,7 @@ def main():
         threads = []
         count = int(input("How many? >>> "))
         for i in range(count):
-            th = threading.Thread(target=check_driver, args=(url, username, kingdom))
+            th = threading.Thread(target=create_account, args=(url, username, kingdom))
             th.daemon = True
             threads.append(th)
         for th in threads:
@@ -61,7 +53,7 @@ def main():
         for th in threads:
             th.join()
     else:
-        check_driver(url, username, kingdom)
+        create_account(url, username, kingdom)
 
 
 if __name__ == '__main__':
