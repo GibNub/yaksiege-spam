@@ -41,6 +41,7 @@ def main():
     username = input('Enter Username (recommended 15 char max) >>> ')
     kingdom = input('Enter kingdom name (recommended 15 char max) >>> ')
     t = input('Threads? (leave blank for no) >>> ')
+    # Create threads
     if t:
         threads = []
         count = int(input("How many? >>> "))
