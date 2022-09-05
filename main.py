@@ -1,10 +1,19 @@
 import threading
+import random
+import string
+import secrets
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-# Own modules
-import credentials
+
+def filler(length):
+    x = ''.join(random.choices(string.ascii_letters + string.digits, k=(20-length)))
+    return x
+
+def password():
+    p = ''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(30))
+    return p
 
 
 def get_driver():
@@ -19,17 +28,17 @@ def create_account(url, username, kingdom):
     dr.get(url)
     while True:
         # Credentials
-        password = credentials.password()
+        password = password()
         # Goto signup
         dr.find_element(By.ID, 'SignupButton').click()
         # Fill form
-        dr.find_element(By.NAME, 'username').send_keys(f'{username}{credentials.filler(len(username))}')
+        dr.find_element(By.NAME, 'username').send_keys(f'{username}{filler(len(username))}')
         dr.find_element(By.NAME, 'password').send_keys(password)
         dr.find_element(By.NAME, 'repeat-password').send_keys(password)
         dr.find_element(By.CLASS_NAME, 'submit-button').click()
         # Create kingdom
         dr.find_element(By.LINK_TEXT, 'Siege!').click()
-        dr.find_element(By.NAME, 'kingdom_name').send_keys(f'{kingdom}{credentials.filler(len(kingdom))}')
+        dr.find_element(By.NAME, 'kingdom_name').send_keys(f'{kingdom}{filler(len(kingdom))}')
         dr.find_element(By.CLASS_NAME, 'submit-button').click()
         # Logout
         dr.find_element(By.LINK_TEXT, 'Logout').click()
