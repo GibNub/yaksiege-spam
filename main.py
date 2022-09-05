@@ -30,16 +30,18 @@ def create_account(url, username, kingdom):
     while True:
         # Credentials
         password = password()
+        filler_username = f'{username}{filler(len(username))}'
+        filler_kingdom = f'{kingdom}{filler(len(kingdom))}'
         # Goto signup
         dr.find_element(By.ID, 'SignupButton').click()
         # Fill form
-        dr.find_element(By.NAME, 'username').send_keys(f'{username}{filler(len(username))}')
+        dr.find_element(By.NAME, 'username').send_keys(filler_username)
         dr.find_element(By.NAME, 'password').send_keys(password)
         dr.find_element(By.NAME, 'repeat-password').send_keys(password)
         dr.find_element(By.CLASS_NAME, 'submit-button').click()
         # Create kingdom
         dr.find_element(By.LINK_TEXT, 'Siege!').click()
-        dr.find_element(By.NAME, 'kingdom_name').send_keys(f'{kingdom}{filler(len(kingdom))}')
+        dr.find_element(By.NAME, 'kingdom_name').send_keys(filler_kingdom)
         dr.find_element(By.CLASS_NAME, 'submit-button').click()
         # Logout
         dr.find_element(By.LINK_TEXT, 'Logout').click()
