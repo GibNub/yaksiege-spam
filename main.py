@@ -32,6 +32,8 @@ def create_account(url, username, kingdom):
         dr.find_element(By.NAME, 'username').send_keys(filler_username)
         dr.find_element(By.NAME, 'password').send_keys(password)
         dr.find_element(By.NAME, 'repeat-password').send_keys(password)
+        # captcha = dr.find_element(By.XPATH, '//form[@class="centered account-form"]/p').text
+        # dr.find_element(By.NAME, 'captcha').send_keys(captcha[:11])
         dr.find_element(By.CLASS_NAME, 'submit-button').click()
         # Create kingdom
         dr.find_element(By.LINK_TEXT, 'Siege!').click()
@@ -40,6 +42,7 @@ def create_account(url, username, kingdom):
         # Logout
         dr.find_element(By.LINK_TEXT, 'Logout').click()
         print(f'Account created with username: {filler_username} and kingdom name: {filler_kingdom}')
+
 
 # Main function
 def main():
