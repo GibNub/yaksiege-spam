@@ -1,5 +1,6 @@
 import threading
 import time
+
 import random as ran
 
 from selenium import webdriver
@@ -56,7 +57,7 @@ def create_account(url, list_username, list_kingdom, random=False):
         except exceptions.NoSuchElementException as e:
             print('Account creation failed, trying again')
             print('May be due to SIGNUP_LOCKED or modified element attributes')
-            time.sleep(10)
+            time.sleep(60)
 
 
 # Main function
