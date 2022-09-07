@@ -1,4 +1,6 @@
 import threading
+import random as ran
+import numpy as np
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -18,10 +20,17 @@ def get_driver():
 
 
 # Mass create accounts
-def create_account(url, username, kingdom):
+def create_account(url, list_username, list_kingdom, random=False):
     dr = get_driver()
     dr.get(url)
     while True:
+        if random:
+            local_random = ran.Random()
+            username = local_random.choice(list_username)
+            kingdom = local_random.choice(list_kingdom)
+        else:
+            username = list_username
+            kingdom = list_kingdom
         # Credentials
         password = credentials.password()
         filler_username = f'{username}{credentials.filler(len(username))}'
@@ -46,9 +55,18 @@ def create_account(url, username, kingdom):
 
 # Main function
 def main():
+    random = False
     url = 'https://yaksiege-1.johnnyl19432.repl.co/'
     username = input('Enter Username (recommended 16 char max) >>> ')
-    kingdom = input('Enter kingdom name (recommended 16 char max) >>> ')
+    # Choose random names from list
+    if username == 'random':
+        random = True
+        with open('sus_kingdom.txt', 'r') as f:
+            kingdom = f.read().splitlines()
+        with open('sus_username.txt', 'r') as f:
+            username = f.read().splitlines()
+    else:
+        kingdom = input('Enter kingdom name (recommended 16 char max) >>> ')
     t = input('Threads? (leave blank for no) >>> ')
     # Create threads
     # Parallel creation
@@ -56,7 +74,7 @@ def main():
         threads = []
         count = int(input("How many? >>> "))
         for i in range(count):
-            th = threading.Thread(target=create_account, args=(url, username, kingdom))
+            th = threading.Thread(target=create_account, args=(url, username, kingdom, random))
             th.daemon = True # Quickly quit program
             threads.append(th)
         for th in threads:
@@ -64,7 +82,7 @@ def main():
         for th in threads:
             th.join()
     else:
-        create_account(url, username, kingdom)
+        create_account(url, username, kingdom, random)
 
 
 if __name__ == '__main__':
