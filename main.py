@@ -55,9 +55,11 @@ def create_account(url, list_username, list_kingdom, random=False):
             dr.find_element(By.LINK_TEXT, 'Logout').click()
             print(f'Account created with username: {filler_username} and kingdom name: {filler_kingdom}')
         except exceptions.NoSuchElementException as e:
-            print('Account creation failed, trying again')
+            print('Account creation failed')
             print('May be due to SIGNUP_LOCKED or modified element attributes')
             time.sleep(60)
+            print('trying again')
+            time.sleep(1)
 
 
 # Main function
