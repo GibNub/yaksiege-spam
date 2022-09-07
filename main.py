@@ -1,9 +1,10 @@
 import threading
+import time
 import random as ran
-import numpy as np
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.common import exceptions
 
 # Local modules
 import credentials
@@ -33,24 +34,29 @@ def create_account(url, list_username, list_kingdom, random=False):
             kingdom = list_kingdom
         # Credentials
         password = credentials.password()
-        filler_username = f'{username}{credentials.filler(len(username))}'
-        filler_kingdom = f'{kingdom}{credentials.filler(len(kingdom))}'
-        # Goto signup
-        dr.find_element(By.ID, 'SignupButton').click()
-        # Fill form
-        dr.find_element(By.NAME, 'username').send_keys(filler_username)
-        dr.find_element(By.NAME, 'password').send_keys(password)
-        dr.find_element(By.NAME, 'repeat-password').send_keys(password)
-        # captcha = dr.find_element(By.XPATH, '//form[@class="centered account-form"]/p').text
-        # dr.find_element(By.NAME, 'captcha').send_keys(captcha[:11])
-        dr.find_element(By.CLASS_NAME, 'submit-button').click()
-        # Create kingdom
-        dr.find_element(By.LINK_TEXT, 'Siege!').click()
-        dr.find_element(By.NAME, 'kingdom_name').send_keys(filler_kingdom)
-        dr.find_element(By.CLASS_NAME, 'submit-button').click()
-        # Logout
-        dr.find_element(By.LINK_TEXT, 'Logout').click()
-        print(f'Account created with username: {filler_username} and kingdom name: {filler_kingdom}')
+        try:
+            filler_username = f'{username}{credentials.filler(len(username))}'
+            filler_kingdom = f'{kingdom}{credentials.filler(len(kingdom))}'
+            # Goto signup
+            dr.find_element(By.ID, 'SignupButton').click()
+            # Fill form
+            dr.find_element(By.NAME, 'username').send_keys(filler_username)
+            dr.find_element(By.NAME, 'password').send_keys(password)
+            dr.find_element(By.NAME, 'repeat-password').send_keys(password)
+            # captcha = dr.find_element(By.XPATH, '//form[@class="centered account-form"]/p').text
+            # dr.find_element(By.NAME, 'captcha').send_keys(captcha[:11])
+            dr.find_element(By.CLASS_NAME, 'submit-button').click()
+            # Create kingdom
+            dr.find_element(By.LINK_TEXT, 'Siege!').click()
+            dr.find_element(By.NAME, 'kingdom_name').send_keys(filler_kingdom)
+            dr.find_element(By.CLASS_NAME, 'submit-button').click()
+            # Logout
+            dr.find_element(By.LINK_TEXT, 'Logout').click()
+            print(f'Account created with username: {filler_username} and kingdom name: {filler_kingdom}')
+        except exceptions.NoSuchElementException as e:
+            print('Account creation failed, trying again')
+            print('May be due to SIGNUP_LOCKED or modified element attributes')
+            time.sleep(10)
 
 
 # Main function
