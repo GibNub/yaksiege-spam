@@ -56,7 +56,7 @@ def create_account(url, list_username, list_kingdom, random=False):
             print(f'Account created with username: {filler_username} and kingdom name: {filler_kingdom}')
         except exceptions.NoSuchElementException as e:
             print('Account creation failed')
-            print('May be due to SIGNUP_LOCKED or modified element attributes')
+            print('May be due to SIGNUP_LOCKED or modified element attributes, trying again in 60 seconds')
             time.sleep(60)
             print('trying again')
             time.sleep(1)
